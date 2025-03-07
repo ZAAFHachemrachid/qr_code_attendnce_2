@@ -1,0 +1,61 @@
+name: qr_code_attendnce_2
+description: "QR Code based attendance system with Supabase backend"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI
+  cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.10+1
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^4.0.0
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # Backend & Authentication
+  supabase_flutter: ^2.3.4
+  
+  # Utilities
+  intl: ^0.19.0
+  logger: ^2.0.2+1
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.2
+  url_launcher: ^6.2.5
+  flutter_dotenv: ^5.1.0
+  uuid: ^4.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.3
+  build_runner: ^2.4.8
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - .env
+    - assets/images/
+    - assets/icons/
+
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: assets/fonts/CustomFont-Regular.ttf
+  #       - asset: assets/fonts/CustomFont-Bold.ttf
+  #         weight: 700
