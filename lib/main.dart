@@ -12,16 +12,18 @@ import 'core/theme/app_theme.dart';
 import 'core/models/user_profile.dart';
 import 'feature-student/screens/student_dashboard_screen.dart';
 import 'feature-teacher/screens/teacher_dashboard_screen.dart';
+import 'feature-admin/routes/admin_routes.dart';
+import 'feature-admin/services/admin_init_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // Load env config
   await EnvConfig.load();
 
   // Initialize Logger
   await LoggerService().initialize();
 
-  // Initialize Supabase
   // Initialize Supabase
   await Supabase.initialize(
     url: EnvConfig.supabaseUrl,
@@ -32,6 +34,9 @@ void main() async {
   AppConfig().initialize(
     environment: Environment.development, // Change this for production
   );
+
+  // Initialize admin module (handles desktop window management)
+  await AdminInitService.initialize();
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -62,6 +67,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/teacher',
         builder: (context, state) => const TeacherDashboardScreen(),
       ),
+      // Admin routes
+      ...adminRoutes,
     ],
     redirect: (context, state) {
       final authState = ref.read(authStateProvider);
@@ -82,6 +89,8 @@ final routerProvider = Provider<GoRouter>((ref) {
               return '/student';
             case UserRole.teacher:
               return '/teacher';
+            case UserRole.admin:
+              return '/admin/dashboard';
             default:
               return '/login';
           }
@@ -93,6 +102,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         // Loading state
         return null;
       }
+    },
+    errorBuilder: (context, state) {
+      final authState = ref.read(authStateProvider);
+      if (authState is AuthenticatedState) {
+        final userRole = ref.read(userRoleProvider);
+        if (userRole == UserRole.admin &&
+            state.matchedLocation.startsWith('/admin')) {
+          return const AdminNotFoundScreen();
+        }
+      }
+      return const Scaffold(body: Center(child: Text('Page Not Found')));
     },
   );
 });
